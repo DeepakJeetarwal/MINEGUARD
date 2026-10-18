@@ -1,0 +1,15 @@
+{
+  "name": "mineguard",
+  "version": "1.0.0",
+  "description": "MINEGUARD — an early-stage mine-safety concept and UI showcase",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "devDependencies": {
+    "electron": "^44.9.0"
+  },
+  "allowScripts": {
+    "electron@38.8.6": true
+  }
+}

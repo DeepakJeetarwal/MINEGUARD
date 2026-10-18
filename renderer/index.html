@@ -1,0 +1,873 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>MINEGUARD</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+
+<header class="topbar">
+
+    <div>
+
+        <div class="brand">
+            MINEGUARD
+        </div>
+
+        <div class="subtitle">
+            Real-Time Mine Subsidence Monitoring & Early Warning
+        </div>
+
+    </div>
+
+
+    <div class="system-status">
+
+        <span class="status-dot"></span>
+
+        SYSTEM ONLINE
+
+        <span id="clock">
+            --:--
+        </span>
+
+    </div>
+
+</header>
+
+
+
+<main class="dashboard">
+
+
+<!-- ===================================================== -->
+<!-- LEFT: MINE                                               -->
+<!-- ===================================================== -->
+
+
+<section class="mine-panel">
+
+
+    <div class="panel-header">
+
+        <div>
+
+            <h2>
+                Mine Monitoring Grid
+            </h2>
+
+            <span>
+                Surface + underground sensor topology
+            </span>
+
+        </div>
+
+
+        <div class="legend">
+
+            <span>
+
+                <i class="surface"></i>
+
+                Surface
+
+            </span>
+
+
+            <span>
+
+                <i class="underground"></i>
+
+                Underground
+
+            </span>
+
+        </div>
+
+    </div>
+
+
+
+    <div class="mine-map">
+
+
+        <div class="sky">
+
+            <div class="cloud cloud-one"></div>
+
+            <div class="cloud cloud-two"></div>
+
+        </div>
+
+
+        <div class="surface-ground">
+
+
+            <div class="mountain mountain-one"></div>
+
+            <div class="mountain mountain-two"></div>
+
+
+            <div class="road"></div>
+
+
+            <div class="excavator">
+
+                🚜
+
+            </div>
+
+
+            <div class="surface-building">
+
+                <span>
+                    MINE HQ
+                </span>
+
+            </div>
+
+
+            <div
+                class="truck"
+                id="truck-TRUCK-01"
+            >
+                🚛
+            </div>
+
+
+            <div
+                class="truck truck-two"
+                id="truck-TRUCK-02"
+            >
+                🚚
+            </div>
+
+
+            <div class="ground-label">
+                SURFACE OPERATIONS
+            </div>
+
+
+        </div>
+
+
+
+        <div class="ground-line"></div>
+
+
+
+        <div class="shaft">
+
+            <div class="shaft-label">
+                MAIN SHAFT
+            </div>
+
+        </div>
+
+
+
+        <div class="underground">
+
+
+            <div class="tunnel tunnel-main">
+
+                <span>
+                    MAIN TUNNEL
+                </span>
+
+            </div>
+
+
+            <div class="tunnel tunnel-left">
+
+                <span>
+                    TUNNEL A
+                </span>
+
+            </div>
+
+
+            <div class="tunnel tunnel-right">
+
+                <span>
+                    TUNNEL B
+                </span>
+
+            </div>
+
+
+            <div class="chamber chamber-one">
+
+                <span>
+                    EXTRACTION
+                </span>
+
+            </div>
+
+
+            <div class="chamber chamber-two">
+
+                <span>
+                    EXTRACTION
+                </span>
+
+            </div>
+
+
+            <div class="underground-label">
+                UNDERGROUND MINE WORKINGS
+            </div>
+
+
+        </div>
+
+
+
+        <!-- ============================================= -->
+        <!-- SENSOR NODES                                   -->
+        <!-- ============================================= -->
+
+
+        <div
+            class="node"
+            id="map-N1"
+            style="
+                left:18%;
+                top:26%;
+            "
+        >
+            N1
+        </div>
+
+
+        <div
+            class="node"
+            id="map-N2"
+            style="
+                left:50%;
+                top:19%;
+            "
+        >
+            N2
+        </div>
+
+
+        <div
+            class="node"
+            id="map-N3"
+            style="
+                left:82%;
+                top:27%;
+            "
+        >
+            N3
+        </div>
+
+
+        <div
+            class="node underground-node"
+            id="map-N4"
+            style="
+                left:36%;
+                top:69%;
+            "
+        >
+            N4
+        </div>
+
+
+        <div
+            class="node underground-node"
+            id="map-N5"
+            style="
+                left:68%;
+                top:74%;
+            "
+        >
+            N5
+        </div>
+
+
+
+        <!-- ============================================= -->
+        <!-- DEFORMATION ZONE                               -->
+        <!-- ============================================= -->
+
+
+        <div
+            class="deformation-zone"
+            id="deformationZone"
+        >
+
+            <span>
+                DEFORMATION ZONE
+            </span>
+
+        </div>
+
+
+
+        <!-- ============================================= -->
+        <!-- GATEWAY                                       -->
+        <!-- ============================================= -->
+
+
+        <div class="gateway">
+
+            <div class="gateway-icon">
+                🍓
+            </div>
+
+            <strong>
+                RASPBERRY PI
+            </strong>
+
+            <small>
+                EDGE GATEWAY
+            </small>
+
+        </div>
+
+
+
+        <!-- ============================================= -->
+        <!-- CONNECTIONS                                    -->
+        <!-- ============================================= -->
+
+
+        <div class="connection c1"></div>
+
+        <div class="connection c2"></div>
+
+        <div class="connection c3"></div>
+
+        <div class="connection c4"></div>
+
+        <div class="connection c5"></div>
+
+
+
+        <!-- MOVING PACKETS -->
+
+        <div id="packetLayer"></div>
+
+
+    </div>
+
+
+
+    <!-- PIPELINE -->
+
+
+    <div class="pipeline">
+
+        <div>
+            SENSOR
+        </div>
+
+        <span>→</span>
+
+        <div>
+            LoRa
+        </div>
+
+        <span>→</span>
+
+        <div>
+            RASPBERRY PI
+        </div>
+
+        <span>→</span>
+
+        <div>
+            AI
+        </div>
+
+        <span>→</span>
+
+        <div>
+            GIS
+        </div>
+
+        <span>→</span>
+
+        <div>
+            ALERT
+        </div>
+
+    </div>
+
+
+</section>
+
+
+
+<!-- ===================================================== -->
+<!-- RIGHT PANEL                                             -->
+<!-- ===================================================== -->
+
+
+<section class="control-panel">
+
+
+    <!-- ZONE RISK -->
+
+
+    <div class="overall-risk">
+
+        <div>
+
+            <span class="small-title">
+                CURRENT ZONE RISK
+            </span>
+
+
+            <div
+                id="zoneRisk"
+                class="risk-number"
+            >
+                0%
+            </div>
+
+        </div>
+
+
+        <div
+            id="zoneLevel"
+            class="risk-badge normal"
+        >
+            NORMAL
+        </div>
+
+    </div>
+
+
+
+    <!-- EMERGENCY BANNER -->
+
+
+    <div
+        id="emergencyBanner"
+        class="emergency-banner hidden"
+    >
+
+        <strong>
+            🚨 CRITICAL DEFORMATION DETECTED
+        </strong>
+
+        <span>
+            Immediate assessment of affected zone recommended.
+        </span>
+
+    </div>
+
+
+
+    <!-- GATEWAY -->
+
+
+    <div class="gateway-card">
+
+
+        <div class="gateway-title">
+
+            <span>
+                🍓 Raspberry Pi Gateway
+            </span>
+
+
+            <span
+                id="gatewayStatus"
+                class="online"
+            >
+                ● ONLINE
+            </span>
+
+        </div>
+
+
+        <div class="gateway-stats">
+
+
+            <div>
+
+                <strong id="packetRate">
+                    98%
+                </strong>
+
+                <span>
+                    Link Health
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <strong id="packetCount">
+                    5
+                </strong>
+
+                <span>
+                    Nodes
+                </span>
+
+            </div>
+
+
+            <div>
+
+                <strong>
+                    LoRa
+                </strong>
+
+                <span>
+                    Network
+                </span>
+
+            </div>
+
+
+        </div>
+
+    </div>
+
+
+
+    <!-- AI ANALYSIS -->
+
+
+    <div class="ai-card">
+
+
+        <div class="section-title-row">
+
+            <div>
+
+                <h2>
+                    AI / Anomaly Analysis
+                </h2>
+
+                <span>
+                    Simulation analysis layer
+                </span>
+
+            </div>
+
+
+            <div
+                id="aiStatus"
+                class="ai-status stable"
+            >
+                STABLE
+            </div>
+
+        </div>
+
+
+        <div class="confidence">
+
+            <div class="confidence-label">
+
+                <span>
+                    Confidence
+                </span>
+
+                <strong
+                    id="aiConfidence"
+                >
+                    18%
+                </strong>
+
+            </div>
+
+
+            <div class="confidence-bar">
+
+                <div
+                    id="confidenceFill"
+                ></div>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="aiMessage"
+            class="ai-message"
+        >
+            No significant spatial anomaly detected.
+        </div>
+
+
+        <div
+            id="aiReasons"
+            class="ai-reasons"
+        ></div>
+
+
+        <div class="recommendation">
+
+            <span>
+                Recommended action
+            </span>
+
+            <strong
+                id="recommendation"
+            >
+                Continue routine monitoring.
+            </strong>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- LIVE EVENTS -->
+
+
+    <div class="events-card">
+
+
+        <div class="section-title-row">
+
+            <div>
+
+                <h2>
+                    Live Events
+                </h2>
+
+                <span>
+                    Real-time system activity
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <div
+            id="eventLog"
+            class="event-log"
+        ></div>
+
+
+    </div>
+
+
+
+    <!-- DEMO SCENARIOS -->
+
+
+    <div class="scenario-section">
+
+
+        <div class="scenario-header">
+
+
+            <div>
+
+                <h2>
+                    Demo Scenarios
+                </h2>
+
+                <span>
+                    Simulate mine conditions
+                </span>
+
+            </div>
+
+
+            <div
+                id="scenarioStatus"
+                class="scenario-status"
+            >
+                NORMAL
+            </div>
+
+        </div>
+
+
+        <div class="scenario-buttons">
+
+
+            <button
+                class="scenario-btn normal-btn"
+                id="normalScenario"
+            >
+                🟢 NORMAL
+            </button>
+
+
+            <button
+                class="scenario-btn medium-btn"
+                id="mediumScenario"
+            >
+                🟡 DEVELOPING
+            </button>
+
+
+            <button
+                class="scenario-btn worst-btn"
+                id="worstScenario"
+            >
+                🔴 WORST CASE
+            </button>
+
+        </div>
+
+
+        <div class="playback-controls">
+
+
+            <button
+                id="playButton"
+                class="play-button"
+            >
+                ▶ RUN FULL SCENARIO
+            </button>
+
+
+            <button
+                id="pauseButton"
+                class="pause-button"
+            >
+                ⏸ PAUSE
+            </button>
+
+
+            <button
+                id="resetButton"
+                class="reset"
+            >
+                RESET
+            </button>
+
+        </div>
+
+
+        <div class="playback-progress">
+
+            <div
+                id="playbackFill"
+            ></div>
+
+        </div>
+
+
+        <div
+            id="playbackText"
+            class="playback-text"
+        >
+            Ready for simulation.
+
+        </div>
+
+    </div>
+
+
+
+    <!-- SENSOR CONTROLS -->
+
+
+    <div class="controls-header">
+
+
+        <h2>
+            Sensor Controls
+        </h2>
+
+
+        <button
+            id="exportButton"
+            class="export-button"
+        >
+            ↓ EXPORT CSV
+        </button>
+
+    </div>
+
+
+    <div
+        id="nodeControls"
+        class="node-controls"
+    ></div>
+
+
+
+    <!-- SELECTED NODE GRAPH -->
+
+
+    <div class="graph-card">
+
+
+        <div class="section-title-row">
+
+
+            <div>
+
+                <h2>
+                    Live Sensor Graph
+                </h2>
+
+                <span
+                    id="selectedNodeLabel"
+                >
+                    Select a node
+                </span>
+
+            </div>
+
+
+            <div
+                id="graphRisk"
+                class="graph-risk"
+            >
+                --
+            </div>
+
+        </div>
+
+
+        <canvas
+            id="sensorChart"
+            width="600"
+            height="230"
+        ></canvas>
+
+    </div>
+
+
+</section>
+
+
+</main>
+
+
+
+<script src="app.js"></script>
+
+
+</body>
+
+</html>
